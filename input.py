@@ -94,6 +94,7 @@ def checkTable(token):
 
 
 def editTable(token):
+
     endpoint = "http://localhost:8080/routes/addNew"
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.post(endpoint, headers=headers)
@@ -145,18 +146,18 @@ def fillTables():
         "patherName": "Сергеевич"
     }, headers=headers)
     requests.post(endpoint, json={
-        "firstName": "Пузиков",
-        "lastName": "Артём",
+        "firstName": "Артём",
+        "lastName": "Пузиков",
         "patherName": "Николаевич"
     }, headers=headers)
     requests.post(endpoint, json={
-        "firstName": "Артамонов",
-        "lastName": "Данил",
+        "firstName": "Данил",
+        "lastName": "Артамонов",
         "patherName": "Сергеевич"
     }, headers=headers)
     requests.post(endpoint, json={
-        "firstName": "Валеев",
-        "lastName": "Даниил",
+        "firstName": "Даниил",
+        "lastName": "Валеев",
         "patherName": "Ильшатович"
     }, headers=headers)
     # Auto
@@ -172,4 +173,3 @@ def fillTables():
     requests.post(endpoint + '?time_in=2020-05-14&time_out=2020-06-19&route_id=6&auto_id=21', headers=headers)
     requests.post(endpoint + '?time_in=2020-05-15&time_out=2020-06-20&route_id=7&auto_id=22', headers=headers)
     requests.post(endpoint + '?time_in=2020-05-16&time_out=2020-06-21&route_id=8&auto_id=23', headers=headers)
-    requests.post(endpoint + '?time_in=2020-05-17&time_out=2020-06-22&route_id=9&auto_id=24', headers=headers)
