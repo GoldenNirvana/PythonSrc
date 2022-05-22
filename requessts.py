@@ -29,13 +29,13 @@ def checkPersonnelTable(token):
 def checkJournalTable(token):
     while True:
         print('1 - Показать все записи')
-        print('2 - Найти запись по id')
+        print('2 - Найти запись по id маршрута')
         print('8 - Назад')
         print('9 - Выход из программы')
         endpoint = "http://localhost:8080/journals/"
         headers = {"Authorization": f"Bearer {token}"}
         x = input()
-        if int(x) == 1:
+        if x == '1':
             endpoint += 'getAll'
             request = requests.get(endpoint, headers=headers).json()
             table = PrettyTable()
@@ -46,13 +46,16 @@ def checkJournalTable(token):
                     [i, request[i]["timeIn"], request[i]["timeOut"], request[i]["autoId"]["personnelId"]["firstName"],
                      request[i]["autoId"]["num"], request[i]["routeId"]["id"], request[i]["routeId"]["name"]])
             print(table)
-        if int(x) == 2:
+        if x == '2':
             id = input('Введите id маршрута\n')
-            request = requests.get(endpoint + f'getById?routeId={id}', headers=headers).json()
-            print(request)
-        if int(x) == 8:
+            try:
+                request = requests.get(endpoint + f'getById?routeId={id}', headers=headers).json()
+                print(request)
+            except:
+                print('Записи с таким маршрутом нет в базе.')
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
@@ -65,7 +68,7 @@ def checkRoutesTable(token):
         print('8 - Назад')
         print('9 - Выход из программы')
         x = input()
-        if int(x) == 1:
+        if x == '1':
             endpoint += 'getAll'
             request = requests.get(endpoint, headers=headers).json()
             table = PrettyTable()
@@ -74,13 +77,16 @@ def checkRoutesTable(token):
                 table.add_row(
                     [i, request[i]["name"]])
             print(table)
-        if int(x) == 2:
+        if x == '2':
             id = input('Введите id маршрута\n')
-            request = requests.get(endpoint + f'getRouteById?id={id}', headers=headers).json()
-            print(request)
-        if int(x) == 8:
+            try:
+                request = requests.get(endpoint + f'getRouteById?id={id}', headers=headers).json()
+                print(request)
+            except:
+                print("Такого маршрута нет в базе")
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
@@ -92,7 +98,7 @@ def editRoutesTable(token):
         print('8 - Назад')
         print('9 - Выход из программы')
         x = input()
-        if int(x) == 1:
+        if x == '1':
             endpoint += 'addNew'
             headers = {"Authorization": f"Bearer {token}"}
             name = input('Введите имя маршрута:\n')
@@ -101,7 +107,7 @@ def editRoutesTable(token):
                 print('Маршрут успешно добавлен')
             else:
                 print('Произошла ошибка во время добавления')
-        if int(x) == 2:
+        if x == '2':
             endpoint += 'deleteByName'
             headers = {"Authorization": f"Bearer {token}"}
             name = input('Введите имя маршрута\n')
@@ -110,9 +116,9 @@ def editRoutesTable(token):
                 print('Маршрут успешно удалён')
             else:
                 print('Произошла ошибка во время удаления')
-        if int(x) == 8:
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
@@ -126,7 +132,7 @@ def editAutosTable(token):
         print('8 - Назад')
         print('9 - Выход из программы')
         x = input()
-        if int(x) == 1:
+        if x == '1':
             endpoint += 'addNewByParams'
             headers = {"Authorization": f"Bearer {token}"}
             num = input('Введите номер автомобиля:\n')
@@ -140,7 +146,7 @@ def editAutosTable(token):
             else:
                 print('Произошла ошибка во время добавления')
 
-        if int(x) == 2:
+        if x == '2':
             endpoint += 'setNewColor'
             headers = {"Authorization": f"Bearer {token}"}
             color = input('Введите новый цвет автомобиля\n')
@@ -151,7 +157,7 @@ def editAutosTable(token):
             else:
                 print('Произошла ошибка во время изменения')
 
-        if int(x) == 3:
+        if x == '3':
             endpoint += 'setNewNum'
             headers = {"Authorization": f"Bearer {token}"}
             num = input('Введите новый номер автомобиля\n')
@@ -162,7 +168,7 @@ def editAutosTable(token):
             else:
                 print('Произошла ошибка во время изменения')
 
-        if int(x) == 4:
+        if x == '4':
             endpoint += 'deleteById'
             headers = {"Authorization": f"Bearer {token}"}
             id = input('Введите id водителя\n')
@@ -172,9 +178,9 @@ def editAutosTable(token):
             else:
                 print('Произошла ошибка во время удаления')
 
-        if int(x) == 8:
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
@@ -187,7 +193,7 @@ def editPersonnelTable(token):
         print('8 - Назад')
         print('9 - Выход из программы')
         x = input()
-        if int(x) == 1:
+        if x == '1':
             endpoint += 'addNew'
             headers = {"Authorization": f"Bearer {token}"}
             first = input('Введите имя водителя:\n')
@@ -204,7 +210,7 @@ def editPersonnelTable(token):
             else:
                 print('Произошла ошибка во время добавления')
 
-        if int(x) == 2:
+        if x == '2':
             endpoint += 'setNewName'
             headers = {"Authorization": f"Bearer {token}"}
             first = input('Введите новое имя водителя:\n')
@@ -215,7 +221,7 @@ def editPersonnelTable(token):
             else:
                 print('Произошла ошибка во время изменения')
 
-        if int(x) == 3:
+        if x == '3':
             endpoint += 'deleteById'
             headers = {"Authorization": f"Bearer {token}"}
             id = input('Введите id водителя:\n')
@@ -225,9 +231,9 @@ def editPersonnelTable(token):
             else:
                 print('Произошла ошибка во время удаления')
 
-        if int(x) == 8:
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
@@ -239,7 +245,7 @@ def editJournalTable(token):
         print('8 - Назад')
         print('9 - Выход из программы')
         x = input()
-        if int(x) == 1:
+        if x == '1':
             endpoint += 'addNewByParams'
             headers = {"Authorization": f"Bearer {token}"}
             timeIn = input('Введите время выезда:\n')
@@ -254,7 +260,7 @@ def editJournalTable(token):
             else:
                 print('Произошла ошибка во время добавления')
 
-        if int(x) == 2:
+        if x == '2':
             endpoint += 'deleteById'
             headers = {"Authorization": f"Bearer {token}"}
             id = input('Введите id записи\n')
@@ -264,7 +270,7 @@ def editJournalTable(token):
             else:
                 print('Произошла ошибка во время удаления')
 
-        if int(x) == 8:
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)

@@ -4,10 +4,6 @@ from requessts import checkAutoTable, checkPersonnelTable, checkRoutesTable, che
     editPersonnelTable, editRoutesTable, editJournalTable
 
 
-def errorInput():
-    print("Неверный логин или пароль")
-
-
 def getUserToken(username, password):
     endpoint = "http://localhost:8080/api/login"
     request_body = {
@@ -21,6 +17,7 @@ def getUserToken(username, password):
 
 
 def autherise():
+    print('<<< Напишите \'exit\' чтобы выйти >>>')
     while True:
         userName = input("Введите имя пользователя:\n")
         if userName == 'exit':
@@ -37,13 +34,11 @@ def doMainCycle():
         print("1 - Войти в учетную запись")
         print("2 - Выйти из программы")
         x = input()
-        if int(x) == 1:
+        if x == '1':
             userToken = autherise()
             if not userToken == '1':
                 inLikeUser(userToken)
-            else:
-                errorInput()
-        if int(x) == 2:
+        if x == '2':
             break
 
 
@@ -55,13 +50,13 @@ def inLikeUser(token):
         print("8 - Выход в главное меню")
         print("9 - Выход из программы")
         x = input()
-        if int(x) == 1:
+        if x == '1':
             checkTable(token)
-        if int(x) == 2:
+        if x == '2':
             editTable(token)
-        if int(x) == 8:
+        if x == '8':
             return
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
@@ -79,23 +74,22 @@ def checkTable(token):
     while True:
         printInfo()
         x = input()
-        if int(x) == 1:
+        if x == '1':
             checkAutoTable(token)
-        if int(x) == 2:
+        if x == '2':
             checkPersonnelTable(token)
-        if int(x) == 3:
+        if x == '3':
             checkRoutesTable(token)
-        if int(x) == 4:
+        if x == '4':
             checkJournalTable(token)
-        if int(x) == 8:
+        if x == '8':
             break
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
 def editTable(token):
-
-    endpoint = "http://localhost:8080/routes/addNew"
+    endpoint = "http://localhost:8080/api/user/log"
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.post(endpoint, headers=headers)
     if response.status_code == 403:
@@ -104,17 +98,17 @@ def editTable(token):
     while True:
         printInfo()
         x = input()
-        if int(x) == 1:
+        if x == '1':
             editAutosTable(token)
-        if int(x) == 2:
+        if x == '2':
             editPersonnelTable(token)
-        if int(x) == 3:
+        if x == '3':
             editRoutesTable(token)
-        if int(x) == 4:
+        if x == '4':
             editJournalTable(token)
-        if int(x) == 8:
+        if x == '8':
             break
-        if int(x) == 9:
+        if x == '9':
             exit(0)
 
 
