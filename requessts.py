@@ -1,28 +1,36 @@
 from prettytable import PrettyTable
 import requests
 
+def checkToken(request):
+    if "Token has expired" in request:
+        raise Exception("The Token has expired")
+
 
 def checkAutoTable(token):
     endpoint = "http://localhost:8080/autos/getAll"
     headers = {"Authorization": f"Bearer {token}"}
-    request = requests.get(endpoint, headers=headers).json()
+    request = requests.get(endpoint, headers=headers)
+    checkToken(request.text)
+    request = request.json()
     table = PrettyTable()
     table.field_names = ["№", "Номер", "Цвет", "Марка", "Имя водителя"]
     for i in range(len(request)):
         table.add_row(
-            [i, request[i]["num"], request[i]["color"], request[i]["mark"], request[i]["personnelId"]["firstName"]])
+            [i + 1, request[i]["num"], request[i]["color"], request[i]["mark"], request[i]["personnelId"]["firstName"]])
     print(table)
 
 
 def checkPersonnelTable(token):
     endpoint = "http://localhost:8080/personnels/getAll"
     headers = {"Authorization": f"Bearer {token}"}
-    request = requests.get(endpoint, headers=headers).json()
+    request = requests.get(endpoint, headers=headers)
+    checkToken(request.text)
+    request = request.json()
     table = PrettyTable()
     table.field_names = ["№", "Id", "Имя", "Фамилия", "Отчество"]
     for i in range(len(request)):
         table.add_row(
-            [i, request[i]["id"], request[i]["firstName"], request[i]["lastName"], request[i]["patherName"]])
+            [i + 1, request[i]["id"], request[i]["firstName"], request[i]["lastName"], request[i]["patherName"]])
     print(table)
 
 
@@ -37,19 +45,23 @@ def checkJournalTable(token):
         x = input()
         if x == '1':
             endpoint += 'getAll'
-            request = requests.get(endpoint, headers=headers).json()
+            request = requests.get(endpoint, headers=headers)
+            checkToken(request.text)
+            request = request.json()
             table = PrettyTable()
             table.field_names = ["№", "Время выезда", "Время приезда", "Имя водителя", "Номер машины", "Id маршрута",
                                  "Название маршрута"]
             for i in range(len(request)):
                 table.add_row(
-                    [i, request[i]["timeIn"], request[i]["timeOut"], request[i]["autoId"]["personnelId"]["firstName"],
+                    [i + 1, request[i]["timeIn"][0:10], request[i]["timeOut"][0:10], request[i]["autoId"]["personnelId"]["firstName"],
                      request[i]["autoId"]["num"], request[i]["routeId"]["id"], request[i]["routeId"]["name"]])
             print(table)
         if x == '2':
             id = input('Введите id маршрута\n')
             try:
-                request = requests.get(endpoint + f'getById?routeId={id}', headers=headers).json()
+                request = requests.get(endpoint + f'getById?routeId={id}', headers=headers)
+                checkToken(request.text)
+                request = request.json()
                 print(request)
             except:
                 print('Записи с таким маршрутом нет в базе.')
@@ -70,17 +82,21 @@ def checkRoutesTable(token):
         x = input()
         if x == '1':
             endpoint += 'getAll'
-            request = requests.get(endpoint, headers=headers).json()
+            request = requests.get(endpoint, headers=headers)
+            checkToken(request.text)
+            request = request.json()
             table = PrettyTable()
             table.field_names = ["№", "Название маршрута"]
             for i in range(len(request)):
                 table.add_row(
-                    [i, request[i]["name"]])
+                    [i + 1, request[i]["name"]])
             print(table)
         if x == '2':
             id = input('Введите id маршрута\n')
             try:
-                request = requests.get(endpoint + f'getRouteById?id={id}', headers=headers).json()
+                request = requests.get(endpoint + f'getRouteById?id={id}', headers=headers)
+                checkToken(request.text)
+                request = request.json()
                 print(request)
             except:
                 print("Такого маршрута нет в базе")
@@ -141,6 +157,7 @@ def editAutosTable(token):
             vId = input('Введите id водителя:\n')
             response = requests.post(endpoint + f'?num={num}&color={color}&mark={mark}&personnel_id={vId}',
                                      headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Автомобиль успешно добавлен')
             else:
@@ -152,6 +169,7 @@ def editAutosTable(token):
             color = input('Введите новый цвет автомобиля\n')
             id = input('Введите id автомобиля\n')
             response = requests.put(endpoint + f'?id={id}&newColor={color}', headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Цвет успешно изменён')
             else:
@@ -163,6 +181,7 @@ def editAutosTable(token):
             num = input('Введите новый номер автомобиля\n')
             id = input('Введите id автомобиля\n')
             response = requests.put(endpoint + f'?id={id}&newNum={num}', headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Цвет успешно изменён')
             else:
@@ -173,6 +192,7 @@ def editAutosTable(token):
             headers = {"Authorization": f"Bearer {token}"}
             id = input('Введите id водителя\n')
             response = requests.delete(endpoint + f'?id={id}', headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Автомобиль успешно удалён')
             else:
@@ -205,6 +225,7 @@ def editPersonnelTable(token):
                 "patherName": pathn
             }
             response = requests.post(endpoint, json=data, headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Водитель успешно добавлен')
             else:
@@ -216,6 +237,7 @@ def editPersonnelTable(token):
             first = input('Введите новое имя водителя:\n')
             id = input('Введите id водителя\n')
             response = requests.put(endpoint + f'?newName={first}&id={id}', headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Имя успешно изменено')
             else:
@@ -226,6 +248,7 @@ def editPersonnelTable(token):
             headers = {"Authorization": f"Bearer {token}"}
             id = input('Введите id водителя:\n')
             response = requests.delete(endpoint + f'?id={id}', headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Водитель успешно удалён')
             else:
@@ -255,6 +278,7 @@ def editJournalTable(token):
             response = requests.post(
                 endpoint + f'?time_in={timeIn}&time_out={timeOut}&route_id={routeId}&auto_id={autoId}',
                 headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Запись успешна добавлен')
             else:
@@ -265,6 +289,7 @@ def editJournalTable(token):
             headers = {"Authorization": f"Bearer {token}"}
             id = input('Введите id записи\n')
             response = requests.delete(endpoint + f'?id={id}', headers=headers)
+            checkToken(response.text)
             if response.status_code == 200:
                 print('Запись успешно удалёна')
             else:

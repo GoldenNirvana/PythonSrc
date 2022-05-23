@@ -16,7 +16,7 @@ def getUserToken(username, password):
     return s[s.find(':\"') + 2:s.find('\",\"')]
 
 
-def autherise():
+def getTokenAndLogIn():
     print('<<< Напишите \'exit\' чтобы выйти >>>')
     while True:
         userName = input("Введите имя пользователя:\n")
@@ -31,15 +31,18 @@ def autherise():
 
 def doMainCycle():
     while True:
-        print("1 - Войти в учетную запись")
-        print("2 - Выйти из программы")
-        x = input()
-        if x == '1':
-            userToken = autherise()
-            if not userToken == '1':
-                inLikeUser(userToken)
-        if x == '2':
-            break
+        try:
+            print("1 - Войти в учетную запись")
+            print("2 - Выйти из программы")
+            x = input()
+            if x == '1':
+                userToken = getTokenAndLogIn()
+                if not userToken == '1':
+                    inLikeUser(userToken)
+            if x == '2':
+                break
+        except Exception as e:
+            print(e)
 
 
 def inLikeUser(token):
@@ -114,7 +117,7 @@ def editTable(token):
 
 def fillTables():
     # Route
-    tk = getUserToken('a', 'a')
+    tk = getUserToken('admin', 'admin')
     headers = {"Authorization": f"Bearer {tk}"}
     endpoint = "http://localhost:8080/routes/addNew"
     requests.post(endpoint, json={"name": 'Москва'}, headers=headers)

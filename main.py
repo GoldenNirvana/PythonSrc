@@ -1,5 +1,3 @@
-import requests
-
 from input import doMainCycle, fillTables
 
 
